@@ -25,13 +25,14 @@ typedef struct  {
 class NetworkManager {
 
     public:
-        NetworkManager();
+        NetworkManager(std::shared_ptr<Config> runningConsoleConfig);
         ~NetworkManager();
         void updateIPs();
         int set_interface_address(const char* interface, const char* address, const char* netmask);
         std::vector<interfaceMeta> retrieveInterfaces();
     private:
         std::vector<interfaceMeta> interfaces;
+        std::shared_ptr<Config> runningConsoleConfig;
 };
 
 #endif

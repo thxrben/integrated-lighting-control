@@ -11,18 +11,19 @@
 
 using namespace std;
 
-SessionAPI::SessionAPI()
+SessionAPI::SessionAPI(std::shared_ptr<Config> runningConsoleConfig)
 {
+    this->runningConsoleConfig = runningConsoleConfig;
     this->shouldThreadStop = false;
 };
 
 void SessionAPI::init(interfaceMeta interface)
 {
     int broadcastEnable = 1;
-    int sessionID = currentConfig.get<int>("session.sessionID");
+    int sessionID = runningConsoleConfig->getProperty<int>(SESSION_ID);
     int socketFlags;
 
-    std::string sessionNameStr = currentConfig.get<std::string>("session.sessionName");
+    std::string sessionNameStr = runningConsoleConfig->getProperty<std::string>(SESSION_NAME);
     const char *sessionName = sessionNameStr.c_str();
 
     this->currentInterface = interface;

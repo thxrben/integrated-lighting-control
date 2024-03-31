@@ -52,6 +52,12 @@ find_library(ZeroMQ_LIBRARY
 # Generating static libraries:
 #
 
+
+#CONFIG
+add_library(config STATIC src/config/Config.cpp)
+target_include_directories(config PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+
 # DMX ENGINE
 add_library(effects STATIC src/effects/Effect.cpp src/effects/SineWave.cpp)
 target_include_directories(effects PUBLIC ${PROJECT_SOURCE_DIR}/include)
@@ -66,18 +72,15 @@ add_library(dmxengine STATIC src/dmx_engine/DMXEngine.cpp src/dmx_engine/Univers
 target_include_directories(dmxengine PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(dmxengine PRIVATE effects fixture)
 
-#CONFIG
-add_library(config STATIC src/config/Config.cpp)
-target_include_directories(config PUBLIC ${PROJECT_SOURCE_DIR}/include)
-
 #NETWORKING
 add_library(network STATIC src/network/NetworkManager.cpp)
-target_include_directories(network PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(network PUBLIC ${PROJECT_SOURCE_DIR}/include config)
+target_link_libraries(network PUBLIC config)
 
 #SESSION
 add_library(session STATIC src/session/Session.cpp src/session/SessionAPI.cpp src/session/SessionManager.cpp src/session/Station.cpp)
-target_include_directories(session PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(session PRIVATE network)
+target_include_directories(session PUBLIC ${PROJECT_SOURCE_DIR}/include config)
+target_link_libraries(session PRIVATE network config)
 
 #LOGGING
 add_library(logger STATIC src/logger/Log.cpp src/logger/LogEvent.cpp)
@@ -85,8 +88,8 @@ target_include_directories(logger PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 #IPC
 add_library(ipc STATIC src/ipc/IPCManager.cpp)
-target_include_directories(ipc PUBLIC ${PROJECT_SOURCE_DIR}/include ${ZeroMQ_INCLUDE_DIR})
-target_link_libraries(ipc PRIVATE ${ZeroMQ_LIBRARY} zmqpp)   
+target_include_directories(ipc PUBLIC ${PROJECT_SOURCE_DIR}/include ${ZeroMQ_INCLUDE_DIR} config)
+target_link_libraries(ipc PRIVATE ${ZeroMQ_LIBRARY} zmqpp config)   
 
 
 #

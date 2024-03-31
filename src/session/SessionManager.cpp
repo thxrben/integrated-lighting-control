@@ -1,8 +1,9 @@
 #include "session/SessionManager.hpp"
 
-SessionManager::SessionManager(std::shared_ptr<NetworkManager> networkManager) {
-    this->sessionAPI = std::make_unique<SessionAPI>();
+SessionManager::SessionManager(std::shared_ptr<Config> runningConsoleConfig, std::shared_ptr<NetworkManager> networkManager) {
     this->networkManager = networkManager;
+    this->runningConsoleConfig = runningConsoleConfig;
+    this->sessionAPI = std::make_unique<SessionAPI>(runningConsoleConfig);
 };
 
 SessionManager::~SessionManager() {

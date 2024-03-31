@@ -6,6 +6,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <string>
 
 #include <zmqpp/zmqpp.hpp>
 
@@ -24,8 +25,9 @@ class IPCManager {
         zmqpp::socket_type type; // No PTR needed, just an enum
         std::shared_ptr<zmqpp::socket> socket;
         std::thread zmqppThread;
+        std::shared_ptr<Config> runningConsoleConfig;
     public:
-        IPCManager(std::shared_ptr<Log> logger);
+        IPCManager(std::shared_ptr<Config> runningConsoleConfig, std::shared_ptr<Log> logger);
         void start();
         void receiveLoop();
         ~IPCManager();

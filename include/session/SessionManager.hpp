@@ -17,13 +17,14 @@ enum SessionState { ALONE, MASTER, CONNECTED, CREATING, DESTROYING };
 
 class SessionManager {
     public:
-        SessionManager(std::shared_ptr<NetworkManager> networkManager);
+        SessionManager(std::shared_ptr<Config> runningConsoleConfig, std::shared_ptr<NetworkManager> networkManager);
         ~SessionManager();
         void init();
         void createSession(unsigned int sessionID, char* sessionName);
         void leaveSession();
         void destroySession(); 
     private:
+        std::shared_ptr<Config> runningConsoleConfig;
         std::unique_ptr<Session> currentSession;
         SessionState currentState; // No Pointer needed, since this is an enum
         std::unique_ptr<SessionAPI> sessionAPI;

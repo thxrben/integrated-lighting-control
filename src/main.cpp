@@ -30,6 +30,8 @@
 
 using namespace std;
 
+std::shared_ptr<Config> runningConsoleConfig;
+
 void signalHandler( int signum ) {
     printf("\n\n[" ANSI_COLOR_RED "ILC" ANSI_COLOR_RESET "] RECEIVED SIGNAL %d\n", signum);
     
@@ -50,21 +52,22 @@ int main() {
     std::unique_ptr<SessionManager> sessionManager;
     std::shared_ptr<NetworkManager> networkManager;
     std::unique_ptr<IPCManager> ipcManager;
+    std::shared_ptr<Config> runningConsoleConfig;
 
     printf("Initalising ILC.\n\n");
     printf("ILC Process running on PID %d / TID %d.\n", getpid(), gettid());
 
-    readConfig();
-
     signal(SIGTERM, signalHandler); // Handle incoming Signals
+
+    runningConsoleConfig = std::make_shared<Config>();
 
     logger = std::make_shared<Log>();
 
-    ipcManager = std::make_unique<IPCManager>(logger);
+    ipcManager = std::make_unique<IPCManager>(runningConsoleConfig, logger);
     ipcManager->start(); // Start the IPC
 
-    networkManager = std::make_shared<NetworkManager>();
-    sessionManager = std::make_unique<SessionManager>(networkManager); // Pass networkManager for IP-Addresses
+    networkManager = std::make_shared<NetworkManager>(runningConsoleConfig);
+    sessionManager = std::make_unique<SessionManager>(runningConsoleConfig, networkManager); // Pass networkManager for IP-Addresses
 
     engine = std::make_unique<DMXEngine>(); // Start the DMX-Engine
     

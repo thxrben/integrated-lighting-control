@@ -108,11 +108,13 @@ int NetworkManager::set_interface_address(const char* interface, const char* add
 }
 
 
-NetworkManager::NetworkManager() {
+NetworkManager::NetworkManager(std::shared_ptr<Config> runningConsoleConfig) {
+    this->runningConsoleConfig = runningConsoleConfig;
+    
     printf("[" ANSI_COLOR_GREEN "NetworkManager" ANSI_COLOR_RESET"] : Setting up links...\n");
-    std::string ifaceNameStr = currentConfig.get<std::string>("network.ifaceName");
-    std::string eth0AddrStr = currentConfig.get<std::string>("network.eth0Addr");
-    std::string eth0MaskStr = currentConfig.get<std::string>("network.eth0Mask");
+    std::string ifaceNameStr = runningConsoleConfig->getProperty<std::string>(NETWORK_IFACE_NAME);
+    std::string eth0AddrStr = runningConsoleConfig->getProperty<std::string>(NETWORK_ETH_ADDR);
+    std::string eth0MaskStr = runningConsoleConfig->getProperty<std::string>(NETWORK_ETH_MASK);
     const char * ifaceName = ifaceNameStr.c_str();
     const char * eth0Addr = eth0AddrStr.c_str();
     const char * eth0Mask = eth0MaskStr.c_str();

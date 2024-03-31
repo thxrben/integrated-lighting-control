@@ -1,10 +1,13 @@
 #include "ipc/IPCManager.hpp"
 
 
-IPCManager::IPCManager(std::shared_ptr<Log> logger) {
+IPCManager::IPCManager(std::shared_ptr<Config> runningConsoleConfig, std::shared_ptr<Log> logger) {
+    this->runningConsoleConfig = runningConsoleConfig;
     this->logger = logger;
+
     printf("[IPCManager] Initiating IPC...\n");
-    std::string defaultPort = currentConfig.get<std::string>("ipc.defaultPort");
+    
+    std::string defaultPort = runningConsoleConfig->getProperty<std::string>(IPC_PORT);
 };
 
 void IPCManager::start() {

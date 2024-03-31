@@ -37,7 +37,7 @@ enum SessionCommands {CREATE, JOIN, DESTROY, LEAVE, BEACON_STATION, BEACON_SESSI
 class SessionAPI {
 
     public:
-        SessionAPI();
+        SessionAPI(std::shared_ptr<Config> runningConsoleConfig);
         void init(interfaceMeta interface);
         void start();
         void stop();
@@ -51,6 +51,7 @@ class SessionAPI {
         std::vector<std::unique_ptr<Station>> availableStations;
         unsigned int sessionID;
     private:
+        std::shared_ptr<Config> runningConsoleConfig;
         char header[6] = { 'I', 'L', 'C', 'N', 'E', 'T'};
         int socketFD;
         int opt;
