@@ -10,13 +10,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.29)
 
 project(CustomDMXEngine VERSION 1.0
                         DESCRIPTION "Integrated Lighting Control"
                         LANGUAGES CXX)
-
-
 
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
@@ -34,112 +32,61 @@ message("-- The build directory is " ${CMAKE_BINARY_DIR} )
 #message("-- Adding libraries/classes: ")
 #target_include_directories(ilc PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-add_library(zmq STATIC IMPORTED)
-add_library(zmqpp STATIC IMPORTED)
+# Loading ZMQ via PkgConfig:
+# (ZMQPP does support cmake, so no need to find it!)
+find_package(PkgConfig)
+pkg_check_modules(PC_ZeroMQ QUIET zmq)
+
+find_path(ZeroMQ_INCLUDE_DIR
+        NAMES zmq.hpp
+        PATHS ${PC_ZeroMQ_INCLUDE_DIRS}
+        )
+
+## use the hint from above to find the location of libzmq
+find_library(ZeroMQ_LIBRARY
+        NAMES zmq
+        PATHS ${PC_ZeroMQ_LIBRARY_DIRS}
+        )
 
 #
 # Generating static libraries:
 #
 
 # DMX ENGINE
-add_library(effects STATIC 
-    src/effects/Effect.cpp
-    src/effects/SineWave.cpp
-)
+add_library(effects STATIC src/effects/Effect.cpp src/effects/SineWave.cpp)
+target_include_directories(effects PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-target_include_directories(effects 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
+add_library(dmxoutput STATIC src/dmx_output/Output.cpp src/dmx_output/ArtNet.cpp)
+target_include_directories(dmxoutput PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-add_library(dmxoutput STATIC 
-    src/dmx_output/Output.cpp
-    src/dmx_output/ArtNet.cpp
-)
+add_library(fixture STATIC src/fixture/Fixture.cpp src/fixture/channel/Channel.cpp)
+target_include_directories(fixture PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-target_include_directories(dmxoutput 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
-add_library(dmxengine STATIC 
-    src/dmx_engine/DMXEngine.cpp
-    src/dmx_engine/Universe.cpp
-)
-
-target_include_directories(dmxengine 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
-
-add_library(fixture STATIC 
-    src/fixture/Fixture.cpp
-    src/fixture/channel/Channel.cpp
-)
-
-target_include_directories(fixture 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
+add_library(dmxengine STATIC src/dmx_engine/DMXEngine.cpp src/dmx_engine/Universe.cpp)
+target_include_directories(dmxengine PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(dmxengine PRIVATE effects fixture)
 
 #CONFIG
-add_library(config STATIC 
-    src/config/Config.cpp
-)
-
-target_include_directories(config 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
+add_library(config STATIC src/config/Config.cpp)
+target_include_directories(config PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 #NETWORKING
-add_library(network STATIC 
-    src/ipc/IPCManager.cpp
-)
+add_library(network STATIC src/network/NetworkManager.cpp)
+target_include_directories(network PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-target_include_directories(network 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
-
-add_library(session STATIC 
-    src/session/Session.cpp
-    src/session/SessionAPI.cpp
-    src/session/SessionManager.cpp
-    src/session/Station.cpp
-)
-
-target_include_directories(session 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
-
-#IPC (Network)
-add_library(ipc STATIC 
-    src/ipc/IPCManager.cpp
-)
-
-target_include_directories(ipc 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
-
+#SESSION
+add_library(session STATIC src/session/Session.cpp src/session/SessionAPI.cpp src/session/SessionManager.cpp src/session/Station.cpp)
+target_include_directories(session PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(session PRIVATE network)
 
 #LOGGING
-add_library(logger STATIC 
-    src/logger/Log.cpp
-    src/logger/LogEvent.cpp
-)
+add_library(logger STATIC src/logger/Log.cpp src/logger/LogEvent.cpp)
+target_include_directories(logger PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-target_include_directories(logger 
-    PUBLIC 
-        ${PROJECT_SOURCE_DIR}/include
-)
+#IPC
+add_library(ipc STATIC src/ipc/IPCManager.cpp)
+target_include_directories(ipc PUBLIC ${PROJECT_SOURCE_DIR}/include ${ZeroMQ_INCLUDE_DIR})
+target_link_libraries(ipc PRIVATE ${ZeroMQ_LIBRARY} zmqpp)   
 
 
 
@@ -149,29 +96,18 @@ target_include_directories(logger
 
 message("Generating executable...")
 
-
 add_executable(ilc 
     src/main.cpp
 )
 
-#Link Libraries to libraries
-target_link_libraries(ipc
-        PRIVATE
-        zmq
-        zmqpp
-)   
-
 target_link_libraries(ilc 
-    PRIVATE 
-        ipc 
-        effects
-        dmxengine 
+    PRIVATE
         config 
-        network 
+        ipc 
         logger
-        session 
-        dmxoutputs 
-        fixture 
+        dmxengine  
+        session  
+        network 
         Threads::Threads 
 )
 

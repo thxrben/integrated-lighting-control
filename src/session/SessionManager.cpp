@@ -11,7 +11,7 @@ SessionManager::~SessionManager() {
 };
 
 void SessionManager::init() {
-    this->sessionAPI->init(this->networkManager->retrieveInterfaces().at(0));
+    this->sessionAPI->init(this->networkManager.get()->retrieveInterfaces().at(0));
     this->sessionAPI->start();
 }
 
