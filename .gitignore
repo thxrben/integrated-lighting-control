@@ -1,4 +1,4 @@
-build
+*build/*
 lib
 ilc
 CMakeFiles
@@ -8,5 +8,3 @@ Makefile
 .a
 .idea
 .vscode
-graphics
-graphics/*

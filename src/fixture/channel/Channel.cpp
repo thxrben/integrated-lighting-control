@@ -1,4 +1,4 @@
-#include "Channel.hpp"
+#include "fixture/channel/Channel.hpp"
 
 Channel::Channel() {
     Channel(1,0);

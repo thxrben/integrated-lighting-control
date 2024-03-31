@@ -7,9 +7,9 @@
 #include <memory>
 #include <mutex>
 
-#include "FrameLimit.hpp"
+#include "dmx_engine/FrameLimit.hpp"
 
-#include "Universe.hpp"
+#include "dmx_engine/Universe.hpp"
 
 #include "effects/SineWave.hpp"
 

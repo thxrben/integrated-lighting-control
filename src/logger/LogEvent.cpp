@@ -1,4 +1,4 @@
-#include "LogEvent.hpp"
+#include "logger/LogEvent.hpp"
 
 /*
     #   Just a single LogEvent.

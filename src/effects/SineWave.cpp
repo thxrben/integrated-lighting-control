@@ -1,4 +1,4 @@
-#include "SineWave.hpp"
+#include "effects/SineWave.hpp"
 
 SineWave::SineWave() : Effect() {
 

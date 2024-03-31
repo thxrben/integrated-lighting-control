@@ -1,4 +1,4 @@
-#include "Universe.hpp"
+#include "dmx_engine/Universe.hpp"
 
 Universe::Universe(unsigned short universe) {
     this->universe = universe;

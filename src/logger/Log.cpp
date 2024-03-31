@@ -1,4 +1,4 @@
-#include "Log.hpp"
+#include "logger/Log.hpp"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../fixture/Fixture.hpp"
+#include "fixture/Fixture.hpp"
 
 #ifndef UNIVERSE_HPP
 #define UNIVERSE_HPP

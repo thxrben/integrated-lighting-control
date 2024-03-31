@@ -1,4 +1,4 @@
-#include "Output.hpp"
+#include "dmx_output/Output.hpp"
 
 Output::Output() {
 

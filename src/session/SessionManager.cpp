@@ -1,4 +1,4 @@
-#include "SessionManager.hpp"
+#include "session/SessionManager.hpp"
 
 SessionManager::SessionManager(std::shared_ptr<NetworkManager> networkManager) {
     this->sessionAPI = std::make_unique<SessionAPI>();

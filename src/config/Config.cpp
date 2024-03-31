@@ -1,4 +1,4 @@
-#include "Config.hpp"
+#include "config/Config.hpp"
 
 boost::property_tree::ptree defaultConfig;
 boost::property_tree::ptree currentConfig;

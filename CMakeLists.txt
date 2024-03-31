@@ -41,6 +41,85 @@ add_library(zmqpp STATIC IMPORTED)
 # Generating static libraries:
 #
 
+# DMX ENGINE
+add_library(effects STATIC 
+    src/effects/Effect.cpp
+    src/effects/SineWave.cpp
+)
+
+target_include_directories(effects 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+add_library(dmxoutput STATIC 
+    src/dmx_output/Output.cpp
+    src/dmx_output/ArtNet.cpp
+)
+
+target_include_directories(dmxoutput 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+add_library(dmxengine STATIC 
+    src/dmx_engine/DMXEngine.cpp
+    src/dmx_engine/Universe.cpp
+)
+
+target_include_directories(dmxengine 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+
+add_library(fixture STATIC 
+    src/fixture/Fixture.cpp
+    src/fixture/channel/Channel.cpp
+)
+
+target_include_directories(fixture 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+
+#CONFIG
+add_library(config STATIC 
+    src/config/Config.cpp
+)
+
+target_include_directories(config 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+
+#NETWORKING
+add_library(network STATIC 
+    src/ipc/IPCManager.cpp
+)
+
+target_include_directories(network 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+
+add_library(session STATIC 
+    src/session/Session.cpp
+    src/session/SessionAPI.cpp
+    src/session/SessionManager.cpp
+    src/session/Station.cpp
+)
+
+target_include_directories(session 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+
+#IPC (Network)
 add_library(ipc STATIC 
     src/ipc/IPCManager.cpp
 )
@@ -49,6 +128,19 @@ target_include_directories(ipc
     PUBLIC 
         ${PROJECT_SOURCE_DIR}/include
 )
+
+
+#LOGGING
+add_library(logger STATIC 
+    src/logger/Log.cpp
+    src/logger/LogEvent.cpp
+)
+
+target_include_directories(logger 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+)
+
 
 
 #
@@ -65,7 +157,8 @@ add_executable(ilc
 #Link Libraries to libraries
 target_link_libraries(ipc
         PRIVATE
-        zmq:zmqpp
+        zmq
+        zmqpp
 )   
 
 target_link_libraries(ilc 
@@ -75,11 +168,10 @@ target_link_libraries(ilc
         dmxengine 
         config 
         network 
-        log 
+        logger
         session 
-        dmx_outputs 
+        dmxoutputs 
         fixture 
-        channel 
         Threads::Threads 
 )
 
