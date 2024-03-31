@@ -6,7 +6,7 @@
 
 #ifdef DEBUG_BUILD
     #define CONFIG_PATH_PREFIX "./current_config"
-#elif
+#else
     #define CONFIG_PATH_PREFIX "/current_config"
 #endif
 
