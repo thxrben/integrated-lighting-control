@@ -29,7 +29,7 @@ class Config {
         bool configReadSuccess = false;
         
         std::string configPropertyToStringPath(ConfigProperty property);
-        std::string configPropertyGetDefault(ConfigProperty property);
+        template<typename T> T configPropertyGetDefault(ConfigProperty property);
 
     public:
         Config();
@@ -37,5 +37,69 @@ class Config {
         template<typename T> T getProperty(ConfigProperty property);
         std::string getPropertyDefault(ConfigProperty property);
 };
+
+template <typename T> T Config::configPropertyGetDefault(ConfigProperty property) {
+    T result;
+
+    if(property == IPC_PORT) {
+        if(!std::is_same<T, int>::value)
+            return 0;
+        result = "5555";
+    } else if(property == SESSION_ID) {
+        if(std::is_same<T, std::string>::value)
+            return "";
+        result = 1;
+    } else if(property == SESSION_NAME) {
+        if(!std::is_same<T, int>::value)
+            return 0;
+        result = "Default Session";
+    } else if(property == NETWORK_IFACE_NAME) {
+        if(!std::is_same<T, int>::value)
+            return 0;
+        result = "eth0";
+    } else if(property == NETWORK_ETH_ADDR) {
+        if(!std::is_same<T, int>::value)
+            return 0;
+        result = "10.0.0.5";
+    } else if(property == NETWORK_ETH_MASK) {
+        if(!std::is_same<T, int>::value)
+            return 0;
+        result = "255.0.0.0";
+    }
+};
+
+
+template <typename T> T Config::getProperty(ConfigProperty property) {
+    T result;
+    bool resultWasAssigned = false;
+    std::string stringPath;
+    
+    stringPath = configPropertyToStringPath(property);
+
+    try {
+        result = currentConfig.get<T>(stringPath);
+        resultWasAssigned = true;
+    } catch(boost::property_tree::ptree_bad_data &ex) {
+        std::cerr << "The config was not formatted correctly while trying to read property \"" << property << "\"" << std::endl;
+        resultWasAssigned = false;
+    } catch(boost::property_tree::ptree_bad_path &ex) {
+        std::cerr << "Config read error: Property \"" << property << "\" not found!" << std::endl;
+        resultWasAssigned = false;
+    } catch (boost::property_tree::ptree_error &ex) {
+        std::cerr << "The config could not be read while trying to read property \"" << property << "\"" << std::endl;
+        resultWasAssigned = false;
+    } catch(std::exception &ex) {
+        std::cerr << "WHAT THE FUCK?" << std::endl;
+        resultWasAssigned = false;
+    }
+
+    if(resultWasAssigned)
+        return result;
+
+    result = Config::configPropertyGetDefault<T>(property);
+
+    return result;
+};
+
 
 #endif

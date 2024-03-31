@@ -29,7 +29,8 @@ std::string Config::configPropertyToStringPath(ConfigProperty property) {
     }
 };
 
-std::string Config::configPropertyGetDefault(ConfigProperty property) {
+/**
+ std::string Config::configPropertyGetDefault(ConfigProperty property) {
     if(property == IPC_PORT) {
         return "5555";
     } else if(property == SESSION_ID) {
@@ -47,6 +48,7 @@ std::string Config::configPropertyGetDefault(ConfigProperty property) {
     }
 };
 
+*/
 
 
 bool Config::readConfig() {
@@ -75,6 +77,7 @@ Config::Config() {
     printf("[CONFIG] Success: %d\n", this->configReadSuccess);
 };
 
+/**
 template <typename T> T Config::getProperty(ConfigProperty property) {
     T result;
     bool resultWasAssigned = false;
@@ -106,3 +109,4 @@ template <typename T> T Config::getProperty(ConfigProperty property) {
 
     return result;
 };
+*/
