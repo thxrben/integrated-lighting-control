@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
+add_compile_definitions(DEBUG_BUILD)
 
 cmake_minimum_required(VERSION 3.29)
 
@@ -18,7 +19,6 @@ project(CustomDMXEngine VERSION 1.0
 
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
-
 find_package(ZeroMQ REQUIRED)
 
 #add_compile_options(-fsanitize=undefined,address)
@@ -87,7 +87,6 @@ target_include_directories(logger PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(ipc STATIC src/ipc/IPCManager.cpp)
 target_include_directories(ipc PUBLIC ${PROJECT_SOURCE_DIR}/include ${ZeroMQ_INCLUDE_DIR})
 target_link_libraries(ipc PRIVATE ${ZeroMQ_LIBRARY} zmqpp)   
-
 
 
 #
