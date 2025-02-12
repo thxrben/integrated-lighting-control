@@ -1,16 +1,5 @@
 #include "config/Config.hpp"
 
-#define STRINGIFY(x) #x
-#define TOSTRING(x) STRINGIFY(x)
-#define AT __FILE__ ":" TOSTRING(__LINE__)
-
-#ifdef DEBUG_BUILD
-    #define CONFIG_PATH_PREFIX "./current_config"
-#else
-    #define CONFIG_PATH_PREFIX "/current_config"
-#endif
-
-
 std::string Config::configPropertyToStringPath(ConfigProperty property) {
     if(property == IPC_PORT) {
         return "ipc.Port";
@@ -25,7 +14,7 @@ std::string Config::configPropertyToStringPath(ConfigProperty property) {
     } else if(property == NETWORK_ETH_MASK) {
         return "network.ethMask";
     } else {
-        return nullptr;
+        return "";
     }
 };
 
@@ -53,7 +42,9 @@ std::string Config::configPropertyToStringPath(ConfigProperty property) {
 
 bool Config::readConfig() {
     try {
-        boost::property_tree::ini_parser::read_ini( TOSTRING(CONFIG_PATH_PREFIX) "/config.ini", currentConfig);
+        std::string configPath = "/current_config/config.ini";
+        std::print("[CONFIG] Reading from {}\n", configPath);
+        boost::property_tree::ini_parser::read_ini( configPath, currentConfig);
     } catch(boost::property_tree::ptree_bad_data &ex) {
         std::cerr << "The config was not formatted correctly." << std::endl;
         return false;

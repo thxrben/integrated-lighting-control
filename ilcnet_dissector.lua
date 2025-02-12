@@ -99,6 +99,8 @@ function ilcnet_prot.dissector(buffer, pinfo, tree)
     elseif intent == 6 then 
     elseif intent == 7 then 
     elseif intent == 8 then 
+    elseif intent == 11 then -- INTENT: Station Query Version
+        local stationVersion
     elseif intent == 12 then
         subtree:add("SessionID already used!", "", "ID in use!");
     else

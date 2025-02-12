@@ -63,8 +63,8 @@ int main() {
 
     logger = std::make_shared<Log>();
 
-    ipcManager = std::make_unique<IPCManager>(runningConsoleConfig, logger);
-    ipcManager->start(); // Start the IPC
+    //ipcManager = std::make_unique<IPCManager>(runningConsoleConfig, logger);
+    //ipcManager->start(); // Start the IPC
 
     networkManager = std::make_shared<NetworkManager>(runningConsoleConfig);
     sessionManager = std::make_unique<SessionManager>(runningConsoleConfig, networkManager); // Pass networkManager for IP-Addresses
@@ -86,7 +86,7 @@ int main() {
     while(currentState != STOPPING) {
 
         if(currentState == STOP_REQUEST) { // Internal console event (Stop-Request)
-           currentState == STOPPING; // STOP PROGRAM
+           currentState = STOPPING; // STOP PROGRAM
         }
 
         std::this_thread::sleep_for(500ms);

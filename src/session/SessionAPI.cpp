@@ -350,7 +350,7 @@ void SessionAPI::stop()
     shutdown(this->socketFD, SHUT_RDWR);
 
     receiveThread.join();
-    printf("[SESSIONAPI] Done.");
+    printf("[SESSIONAPI] Done.\n");
     close(this->socketFD);
     
 };

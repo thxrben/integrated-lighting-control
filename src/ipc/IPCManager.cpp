@@ -75,5 +75,5 @@ IPCManager::~IPCManager() {
     zmq_ctx_term(*(this->context.get()));
     printf("ERRNO: %s\n", zmq_strerror(zmq_errno()));
 
-    this->zmqppThread.join();
+    //this->zmqppThread.join();
 };
