@@ -55,6 +55,10 @@ find_library(ZeroMQ_LIBRARY
 # Generating static libraries:
 #
 
+# DATASTRUCTURES
+#add_library(datastructures STATIC)
+#target_include_directories(datastructures PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
 
 #CONFIG
 add_library(config STATIC src/config/Config.cpp)
@@ -107,6 +111,7 @@ add_executable(ilc
 
 target_link_libraries(ilc 
     PRIVATE
+#        datastructures
         config 
         ipc 
         logger
