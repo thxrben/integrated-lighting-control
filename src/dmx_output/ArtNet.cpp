@@ -46,7 +46,7 @@ ArtNet::ArtNet() {
     /* set up destination address */
     memset(&address,0,sizeof(address));
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr("192.168.1.255");
+    address.sin_addr.s_addr = inet_addr("10.10.40.102");
     address.sin_port=htons(ARTNET_PORT);
 
     printf(ANSI_COLOR_RESET "[" ANSI_COLOR_CYAN "ArtNet" ANSI_COLOR_RESET "] : ArtNet-Output started successfully.\n");
@@ -75,9 +75,9 @@ void ArtNet::sendUniverse(std::shared_ptr<Universe> universe, unsigned char sequ
 
     if (res < 0)
     {
-        printf("RES: %d\n", res);
+        fprintf(stderr, "RES: %d\n", res);
         perror("sendto");
-        exit(1);
+        return;
     }
     if(finalArray == nullptr)
         return;

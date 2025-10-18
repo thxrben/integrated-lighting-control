@@ -98,6 +98,9 @@ add_library(ipc STATIC src/ipc/IPCManager.cpp)
 target_include_directories(ipc PUBLIC ${PROJECT_SOURCE_DIR}/include ${ZeroMQ_INCLUDE_DIR} config)
 target_link_libraries(ipc PRIVATE ${ZeroMQ_LIBRARY} zmqpp config)   
 
+# TIMECODE
+add_library(timecode STATIC src/timecode/TimerSource.cpp src/timecode/InternalTimer.cpp)
+target_include_directories(timecode PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 #
 # Create an executable
@@ -116,8 +119,10 @@ target_link_libraries(ilc
         ipc 
         logger
         dmxengine  
+        dmxoutput
         session  
         network 
+        timecode
         Threads::Threads 
 )
 

@@ -184,9 +184,9 @@ void sendPacket(int socketFD, char* dataArray, int dataArrayLength, struct socka
 
     if (res < 0)
     {
-        printf("ReplyStation: RES: %d\n", res);
+        fprintf(stderr, "ReplyStation: RES: %d\n", res);
         perror("sendto");
-        exit(1);
+        return;
     }
     
 
@@ -230,9 +230,9 @@ void SessionAPI::discover()
     int res = sendto(this->socketFD, finalArray, 7, 0, (struct sockaddr *)&(this->broadcastAddress), sizeof(this->broadcastAddress));
     if (res < 0)
     {
-        printf("RES: %d\n", res);
+        fprintf(stderr, "RES: %d\n", res);
         perror("sendto");
-        exit(1);
+        return;
     }
 
     if (finalArray == nullptr)
@@ -261,9 +261,9 @@ void SessionAPI::replySessionIDInUse(struct sockaddr_in *remoteAddress, unsigned
 
     if (res < 0)
     {
-        printf("DuplicateSessionMSG: RES: %d\n", res);
+        fprintf(stderr, "DuplicateSessionMSG: RES: %d\n", res);
         perror("sendto");
-        exit(1);
+        return;
     }
     // free(sessionName);
     if (finalArray == nullptr)
@@ -302,9 +302,9 @@ void SessionAPI::createSession(unsigned int sessionID, const char *sessionName)
 
     if (res < 0)
     {
-        printf("RES: %d\n", res);
+        fprintf(stderr, "RES: %d\n", res);
         perror("sendto");
-        exit(1);
+        return;
     }
     // free(sessionName);
     if (finalArray == nullptr)
@@ -333,7 +333,7 @@ void SessionAPI::broadcastStationAndState()
     {
         printf(ANSI_COLOR_RESET "[" ANSI_COLOR_MAGENTA "SessionAPI" ANSI_COLOR_RESET "] (StationBeacon) Could not send: Result: %d\n", res);
         perror("sendto");
-        // exit(1);
+        return;
     }
 
     if (finalArray == nullptr)
