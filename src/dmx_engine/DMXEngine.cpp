@@ -102,7 +102,7 @@ void DMXEngine::runEffects()
 
     this->runningEffects.push_back(newEffectsMeta);
 
-    FrameLimit<5> frameLimiter;
+    FrameLimit<84> frameLimiter;
 
     while (!this->shouldThreadStop)
     {
