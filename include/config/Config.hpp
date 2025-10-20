@@ -69,6 +69,8 @@ T Config::configPropertyGetDefault(ConfigProperty property) {
             return "";
         result = "255.0.0.0";
     }
+
+    return result;
 };
 
 

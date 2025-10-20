@@ -33,6 +33,9 @@ class SessionManager {
         std::thread sessionDiscoverThread;
         std::shared_ptr<NetworkManager> networkManager;
 
+        std::vector<std::unique_ptr<Session>> availableSessions;
+        std::vector<std::unique_ptr<Station>> availableStations;
+
 };
 
 #endif

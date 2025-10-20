@@ -51,6 +51,12 @@ find_library(ZeroMQ_LIBRARY
         PATHS ${PC_ZeroMQ_LIBRARY_DIRS}
         )
 
+# Add readerwriterqueue:
+add_subdirectory(libraries/readerwriterqueue)
+
+# Add libremidi:
+add_subdirectory(libraries/libremidi)
+
 #
 # Generating static libraries:
 #
@@ -74,6 +80,9 @@ target_include_directories(dmxoutput PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 add_library(fixture STATIC src/fixture/Fixture.cpp src/fixture/channel/Channel.cpp)
 target_include_directories(fixture PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+add_library(fixturemodifiers STATIC src/fixture_modifiers/FixtureModifier.cpp src/fixture_modifiers/Highlight.cpp src/fixture_modifiers/ManualOverride.cpp src/fixture_modifiers/Blackout.cpp)
+target_include_directories(fixturemodifiers PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 add_library(dmxengine STATIC src/dmx_engine/DMXEngine.cpp src/dmx_engine/Universe.cpp)
 target_include_directories(dmxengine PUBLIC ${PROJECT_SOURCE_DIR}/include)
@@ -102,6 +111,11 @@ target_link_libraries(ipc PRIVATE ${ZeroMQ_LIBRARY} zmqpp config)
 add_library(timecode STATIC src/timecode/TimerSource.cpp src/timecode/InternalTimer.cpp)
 target_include_directories(timecode PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
+# HID Devices:
+add_library(hid STATIC src/hid/devices/Device.cpp src/hid/devices/MidiDevice.cpp)
+target_include_directories(hid PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(hid PUBLIC libremidi readerwriterqueue)
+
 #
 # Create an executable
 #
@@ -114,6 +128,7 @@ add_executable(ilc
 
 target_link_libraries(ilc 
     PRIVATE
+        hid
 #        datastructures
         config 
         ipc 
