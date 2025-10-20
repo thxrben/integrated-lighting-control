@@ -6,7 +6,7 @@
 class Highlight : public FixtureModifier {
 
     public:
-        Highlight(std::shared_ptr<Fixture[]> fixtures) : FixtureModifier(fixtures){};
+        Highlight(std::shared_ptr<Fixture[]> fixtures);
         virtual void modify();
 
 };
