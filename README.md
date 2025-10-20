@@ -39,6 +39,24 @@ This list contains the list of dependencies needed:
     When using Arch, you can install it from the AUR, e.g.:
     > /: yay -S zmqpp-git
 2. Boost
+3. libremidi
+
+    You can clone the libremidi git repo:
+    > /: mkdir libraries
+
+    > /libraries: git clone git@github.com:celtera/libremidi.git
+
+    The known working version is commit 9dd44c5
+
+4. readerwriterqueue
+
+    You can clone the readerwriterqueue git repo:
+    > /: mkdir libraries
+
+    > /libraries: git clone https://github.com/cameron314/readerwriterqueue
+
+    The known working version is 1.0.7 / commit 8b21766
+
 
 ## LUA - Wireshark Dissector
 This repo includes a Wireshark-Dissector which parses network traffic and analyzes it.
