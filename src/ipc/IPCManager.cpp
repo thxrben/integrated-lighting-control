@@ -24,7 +24,7 @@ void IPCManager::start() {
     printf("[IPCManager] Binding...\n");
     this->socket->bind("tcp://127.0.0.1:5555");
 
-    printf("[IPCManager] Done lol \\o/\n");
+    printf("[IPCManager] Done\n");
     //TODO: Start Thread to listen
     this->shouldThreadStop = false;
     this->zmqppThread = std::thread(&IPCManager::receiveLoop, this);

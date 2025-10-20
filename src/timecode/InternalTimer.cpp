@@ -46,19 +46,16 @@ void InternalTimer::run()
     FrameLimit<42> frameLimiter;
     std::chrono::milliseconds currentMs;
 
-    while (this->state != TIMER_STOPPED && this->state != TIMER_PAUSED) {
-        switch (this->state) {
-        case TIMER_RUNNING:
-            this->currentMs = std::chrono::duration_cast<std::chrono::milliseconds>(
-                std::chrono::system_clock::now().time_since_epoch());
-            this->elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(this->currentMs - this->startMs);
-            this->frameCount++;
-            break;
-        default:
-            break;
-        }
+    while (this->state == TIMER_RUNNING) {
+        
+        this->currentMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch());
+
+        this->elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(this->currentMs - this->startMs);
+        this->frameCount = (long long) (this->elapsedMs.count() / 84);
+
         frameLimiter.sleep();
-        }
+    }
 };
 
 void InternalTimer::freeMemory()
