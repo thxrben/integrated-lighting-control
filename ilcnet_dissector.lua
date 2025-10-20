@@ -28,6 +28,8 @@ function get_intent_name(intent)
     elseif intent == 7 then intent_name = "SESSION (Request)"
     elseif intent == 8 then intent_name = "SESSION (Response)"
     elseif intent == 12 then intent_name = "Session ID already in use (Session)"
+    elseif intent == 14 then intent_name = "ECHO Request"
+    elseif intent == 15 then intent_name = "ECHO Reply"
     end
 
     return intent_name
