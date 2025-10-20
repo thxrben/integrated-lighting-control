@@ -34,6 +34,9 @@ class DMXEngine {
     private:
         int universeNum;
         unsigned char sequenceNum;
+        double smoothingValue = 0.94;
+        double averageOutputFps;
+        double averageEffectFps;
         std::vector<std::shared_ptr<Universe>> universes;
         std::vector<std::shared_ptr<Output>> dmxOutputs;
         std::vector<std::shared_ptr<EffectMeta>> runningEffects;
@@ -58,6 +61,8 @@ class DMXEngine {
         void start();
         void stop();
         void freeMemory();
+        double getAverageOutputFps() { return this->averageOutputFps; }
+        double getAverageEffectFps() { return this->averageEffectFps; }
 };
 
 #endif

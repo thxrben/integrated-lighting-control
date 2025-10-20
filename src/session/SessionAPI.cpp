@@ -138,7 +138,8 @@ void SessionAPI::receiveLoop()
             break;
         case BEACON_STATION:
             printf("Station was found (BEACON_STATION received)!...\n");
-            this->availableStations.push_back(std::make_unique<Station>(remoteIp));
+            //TODO: Callback
+            //this->availableStations.push_back(std::make_unique<Station>(remoteIp));
             break;
         case BEACON_SESSION:
             printf("Session was found! (ID: %d) (Length: %d)\n", buffer[7], bytesReceived);
@@ -179,7 +180,7 @@ void SessionAPI::receiveLoop()
 
 void sendPacket(int socketFD, char* dataArray, int dataArrayLength, struct sockaddr_in *remoteAddress) {
 
-    printf("SocketFD %d sending to %s\n", inet_ntoa(remoteAddress->sin_addr));
+    printf("SocketFD %d sending to %s\n", socketFD, inet_ntoa(remoteAddress->sin_addr));
     int res = sendto(socketFD, dataArray, dataArrayLength, 0, (struct sockaddr *) remoteAddress, sizeof((*remoteAddress)));
 
     if (res < 0)

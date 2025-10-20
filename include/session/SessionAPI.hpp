@@ -32,7 +32,7 @@
 
 
 
-enum SessionCommands {CREATE, JOIN, DESTROY, LEAVE, BEACON_STATION, BEACON_SESSION, DISCOVER, DISCOVER_RESPONSE, SESSION_REQUEST, SESSION_RESPONSE, STATION_PROMOTE, STATION_QUERY_VERSION, SESSION_ID_IN_USE, STATION_RESPONSE_VERSION};
+enum SessionCommands {CREATE, JOIN, DESTROY, LEAVE, BEACON_STATION, BEACON_SESSION, DISCOVER, DISCOVER_RESPONSE, SESSION_REQUEST, SESSION_RESPONSE, STATION_PROMOTE, STATION_QUERY_VERSION, SESSION_ID_IN_USE, STATION_RESPONSE_VERSION, ECHO_REQUEST, ECHO_REPLY};
 
 class SessionAPI {
 
@@ -47,8 +47,7 @@ class SessionAPI {
         void createSession(unsigned int sessionID, const char * sessionName);
         void discover();
 
-        std::vector<std::unique_ptr<Session>> availableSessions;
-        std::vector<std::unique_ptr<Station>> availableStations;
+
         unsigned int sessionID;
     private:
         std::shared_ptr<Config> runningConsoleConfig;
@@ -61,8 +60,6 @@ class SessionAPI {
         struct sockaddr_in broadcastAddress;
         std::thread receiveThread;
         void receiveLoop();
-
-
 };
 
 #endif
